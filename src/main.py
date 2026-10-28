@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from Solver.puzzle import Puzzle , Bridge
 
 app = FastAPI(
     title="Bridges Puzzle Solver",
