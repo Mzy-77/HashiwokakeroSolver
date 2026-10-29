@@ -1,46 +1,44 @@
 from Solver.puzzle import Puzzle , Bridge
+from Solver.candidates import FindCandidates
+from Solver.validator import is_complete_solution
+from Solver.capacity import hasRemainingCapacity
 
 
+def solve_backtracking(puzzle: Puzzle) -> list[Bridge] | None:
+    candidates = FindCandidates(puzzle.islands)
 
+    def backTrack(index: int, bridges: list[Bridge]) -> list[Bridge] | None:
+        if not hasRemainingCapacity(puzzle, candidates[index:], bridges): return None
 
-def backTrackingSolver(puzzle: Puzzle , bridges:list[Bridge]):
-    return None
+        if index == len(candidates):
+            if is_complete_solution(puzzle, bridges):
+                return bridges
+            return None
+        
+        island_a , island_b = candidates[index]
+
+        result = backTrack(index + 1, bridges)
+        if result is not None :
+                    return result
+        
+        single_bridge = Bridge(island_a, island_b, 1)
+
+        result = backTrack(index + 1, bridges + [single_bridge])
+        if result is not None :
+            return result
+
+        double_bridge = Bridge(island_a, island_b, 2)
+        result = backTrack(index + 1, bridges + [double_bridge])
+        if result is not None : return result
+
+        return None
+
+    return backTrack(0, [])
+
 
 def geneticSolver(puzzle: Puzzle, bridges:list[Bridge]):
     return None
 
-def memeticSolver(puzzle: Puzzle, bridges:list[Bridge]):
+def memeticSolver(puzzle: Puzzle):
     return None
 
-"Depth First Search"
-def isConnected(
-        puzzle :Puzzle,
-        bridges:list[Bridge]
-)-> bool :
-    if not puzzle.islands: return False
-
-    graph = {island.id: [] for island in puzzle.islands}
-
-    for bridge in bridges :
-        if bridge.island_a not in graph or bridge.island_b not in graph : raise ValueError("Bridge references an unknown island.")
-
-        graph[bridge.island_a].append(bridge.island_b)
-        graph[bridge.island_b].append(bridge.island_a)
-
-    start = puzzle.islands[0].id
-    visited = set()
-    stack= [start]
-
-    while stack:
-        current  = stack.pop()
-
-        if current in visited :
-            continue
-
-        visited.add(current)
-
-        for neighbor in graph[current]:
-            if neighbor not in visited :
-                stack.append(neighbor)
-
-    return len(visited) == len(puzzle.islands)

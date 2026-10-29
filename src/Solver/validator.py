@@ -2,7 +2,7 @@ from Solver.puzzle import Puzzle , Bridge
 from Solver.constraints import bridgeCountComplete , isBridgeCountsValid
 
 from Solver.crossings import has_crossings
-from Solver.algorithms import isConnected
+from Solver.connectivity import isConnected
 
 def isValidState(
         puzzle: Puzzle,

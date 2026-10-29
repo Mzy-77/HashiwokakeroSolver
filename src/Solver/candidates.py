@@ -2,7 +2,7 @@ from itertools import groupby
 
 from Solver.puzzle import Island 
 
-def FindCondidates(islands: list[Island]) -> list[ tuple[ int,int ] ] :
+def FindCandidates(islands: list[Island]) -> list[ tuple[ int,int ] ] :
     Candidates = set()
 
     rows = sorted(islands, key=lambda island: ( island.row, island.column) )
