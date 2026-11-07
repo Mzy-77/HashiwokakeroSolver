@@ -11,13 +11,13 @@ def hasRemainingCapacity(
     current_counts = {island.id: 0 for island in puzzle.islands}
     remaining_capacity = {island.id: 0 for island in puzzle.islands}
 
-    assigned_pairs = {}
+    assigned_pairs: dict[tuple[int, int], int] = {}
 
     for bridge in bridges:
         if bridge.island_a not in islands or bridge.island_b not in islands:
             raise ValueError("Bridge references an unknown island.")
 
-        pair = tuple(sorted((bridge.island_a, bridge.island_b)))
+        pair = (min(bridge.island_a, bridge.island_b), max(bridge.island_a, bridge.island_b))
         assigned_pairs[pair] = bridge.count
 
         current_counts[bridge.island_a] += bridge.count
@@ -27,7 +27,7 @@ def hasRemainingCapacity(
         if island_a not in islands or island_b not in islands:
             raise ValueError("Candidate references an unknown island.")
 
-        pair = tuple(sorted((island_a, island_b)))
+        pair = (min(island_a, island_b), max(island_a, island_b))
         assigned_count = assigned_pairs.get(pair, 0)
 
         remaining = 2 - assigned_count

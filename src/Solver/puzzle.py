@@ -20,8 +20,8 @@ class Puzzle:
         if not self.islands:
             ValueError("Puzzle must contain islands.")
 
-        ids = set()
-        positions = set()
+        ids: set[int] = set()
+        positions: set[tuple[int, int]] = set()
 
         for island in self.islands :
             if island.id < 0 or island.id in ids :
