@@ -112,7 +112,7 @@ def geneticSolver(
         population_size: int = 100,
         max_generations: int = 500,
         mutation_rate: float = 0.05,
-        elitism_size: int = 2,
+        elitism_count: int = 2,
         )-> list[Bridge] | None:
 
     canadidates = FindCandidates(puzzle.islands)
@@ -122,27 +122,56 @@ def geneticSolver(
     if is_complete_solution(puzzle, []):
         return []
 
-    if population_size <= 0 or max_generations <= 0 or not (0 <= mutation_rate <= 1) or elitism_size < 0:
+    if population_size <= 0 or max_generations <= 0 or not (0 <= mutation_rate <= 1) or elitism_count < 0:
         raise ValueError("Invalid parameters for genetic algorithm.")
 
     current_population: list[list[int]] = population(population_size, len(canadidates))
     best_genome: list[int] | None = None
     best_score: float = float('inf')
 
-    for generation in range(max_generations):
+    for _ in range(max_generations):
+
+
         scores : list[int]= [
             fitness(puzzle, asignBridges(genome, canadidates)) for genome in current_population
         ]
 
         best_index= min(range(len(scores)), key=lambda i: scores[i])
+
         if scores[best_index] < best_score:
+
             best_score = scores[best_index]
             best_genome = current_population[best_index].copy()
 
         for genome in current_population:
             brides =  asignBridges(genome, canadidates)
-            return brides
+            if is_complete_solution(puzzle, brides):
+                return brides
 
+        ranked_indexes: list[int] = sorted(range(len(scores)), key=lambda i: scores[i])
+
+        next_population: list[list[int]] = [
+            current_population[i].copy() for i in ranked_indexes[:elitism_count]
+        ]
+
+        while len(next_population) < population_size: 
+            parent1 = selection(current_population, scores)
+            parent2 = selection(current_population, scores)
+
+            child1, child2 = corssover(parent1, parent2)
+
+            child1 = mutation(child1, mutation_rate)
+            child2 = mutation(child2, mutation_rate)
+
+            next_population.append(child1)
+
+            if len(next_population) < population_size:
+                next_population.append(child2)
+
+        current_population = next_population
+
+    if best_genome is not None:
+        return asignBridges(best_genome, canadidates)
 
     return None
 
