@@ -174,3 +174,163 @@ def geneticSolver(
         return asignBridges(best_genome, canadidates)
 
     return None
+
+"end"
+
+def localSearch(
+    puzzle: Puzzle,
+    chromosome: list[int],
+    candidates: list[tuple],
+    max_steps: int = 50,
+) -> list[int]:
+
+    if max_steps < 0:
+        raise ValueError("max_steps cannot be negative")
+
+    best = chromosome.copy()
+
+    best_score = fitness(
+        puzzle,
+        asignBridges(best, candidates)
+    )
+
+    for _ in range(max_steps):
+
+        improved = False
+
+        for i in range(len(best)):
+
+            for value in (0, 1, 2):
+
+                if value == best[i]:
+                    continue
+
+                neighbor = best.copy()
+                neighbor[i] = value
+
+                neighbor_score = fitness(
+                    puzzle,
+                    asignBridges(neighbor, candidates)
+                )
+
+                if neighbor_score < best_score:
+
+                    best = neighbor
+                    best_score = neighbor_score
+                    improved = True
+
+        if is_complete_solution(
+            puzzle,
+            asignBridges(best, candidates)
+        ):
+            return best
+
+        if not improved:
+            break
+
+    return best
+
+def memeticSolver(
+    puzzle: Puzzle,
+    population_size: int = 100,
+    max_generations: int = 500,
+    mutation_rate: float = 0.05,
+    elitism_count: int = 2,
+    local_search_rate: float = 0.2,
+    local_search_steps: int = 20,
+) -> list[Bridge] | None:
+
+    candidates = FindCandidates(puzzle.islands)
+
+    if is_complete_solution(puzzle, []):
+        return []
+
+    if population_size < 2:
+        raise ValueError("Population size must be at least 2")
+
+    if max_generations < 1:
+        raise ValueError("Maximum generations must be at least 1")
+
+    if not 1 <= elitism_count < population_size:
+        raise ValueError("Elitism count must be between 1 and population_size - 1")
+
+    if not 0 <= mutation_rate <= 1:
+        raise ValueError("Mutation rate must be between 0 and 1")
+
+    if not 0 <= local_search_rate <= 1:
+        raise ValueError("Local search rate must be between 0 and 1")
+
+    if local_search_steps < 0:
+        raise ValueError("Local search steps cannot be negative")
+
+    current_population = population(population_size, len(candidates))
+
+    best_genome = None
+    best_score = float("inf")
+    
+    for generation in range(max_generations):
+        scores = [
+            fitness(puzzle, asignBridges(chromosome, candidates))
+            for chromosome in current_population
+        ]
+
+        for chromosome, score in zip(current_population, scores):
+
+            bridges = asignBridges(chromosome, candidates)
+
+            if is_complete_solution(puzzle, bridges):
+                return bridges
+
+            if score < best_score:
+                best_score = score
+                best_genome = chromosome.copy
+
+        ranked_population = sorted(
+            zip(current_population, scores)
+            key=lambda individual: individual[1]
+        )
+
+        next_population = [
+            chromosome.copy()
+            for chromosome, _ in ranked_population[:elitism_count]
+        ]
+
+        while len(next_population) < population_size :
+
+            parent1 = selection(current_population, scores)
+            parent2 = selection(current_population, scores)
+
+            child1 , child2 = corssover(parent1, parent2)
+            child1 = mutation(child1, mutation_rate)
+            child2 = mutation(child2, mutation_rate)
+
+            offspring = [child1, child2]
+
+            for child in offspring:
+                if len(next_population)>= population_size:
+                    break
+
+                if random.random()< local_search_rate:
+                    child = localSearch(
+                        puzzle,
+                        child,
+                        candidates,
+                        local_search_steps
+                    )
+
+                bridges = asignBridges(child, candidates)
+
+                if is_complete_solution(puzzle, bridges):
+                    return bridges
+
+                next_population.append(child)
+
+            current_population = next_population
+
+        if best_genome is not None:
+            bridges = asignBridges(best_genome, candidates)
+
+            if is_complete_solution(puzzle, bridges):
+                return bridges
+
+        return None

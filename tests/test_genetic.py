@@ -4,7 +4,12 @@ from hashiwokakero.Solver.algorithms import (
     selection,
     corssover,
     mutation,
+    asignBridges,
+    localSearch,
+    fitness,
 )
+from hashiwokakero.Solver.puzzle import Island, Puzzle
+from hashiwokakero.Solver.validator import is_complete_solution
 
 
 def test_selection():
@@ -47,3 +52,72 @@ def test_mutation_zero_rate():
     mutated = mutation(chromosome, 0)
 
     assert mutated == chromosome
+
+
+
+def test_local_search_preserves_chromosome_length():
+
+    a = Island(0, 0, 0, 1)
+    b = Island(1, 0, 1, 1)
+
+    puzzle = Puzzle(1, 2, [a, b])
+    candidates = [(a.id, b.id)]
+
+    chromosome = [0]
+
+    result = localSearch(
+        puzzle,
+        chromosome,
+        candidates,
+    )
+
+    assert len(result) == len(chromosome)
+
+
+def test_local_search_never_worsens_fitness():
+
+    a = Island(0, 0, 0, 1)
+    b = Island(1, 0, 1, 1)
+
+    puzzle = Puzzle(1, 2, [a, b])
+    candidates = [(a.id, b.id)]
+
+    chromosome = [0]
+
+    original_score = fitness(
+        puzzle,
+        asignBridges(chromosome, candidates)
+    )
+
+    result = localSearch(
+        puzzle,
+        chromosome,
+        candidates,
+    )
+
+    improved_score = fitness(
+        puzzle,
+        asignBridges(result, candidates)
+    )
+
+    assert improved_score <= original_score
+    assert chromosome == [0]
+
+
+def test_local_search_finds_simple_solution():
+
+    a = Island(0, 0, 0, 1)
+    b = Island(1, 0, 1, 1)
+
+    puzzle = Puzzle(1, 2, [a, b])
+    candidates = [(a.id, b.id)]
+
+    result = localSearch(
+        puzzle,
+        [0],
+        candidates,
+    )
+
+    bridges = asignBridges(result, candidates)
+
+    assert is_complete_solution(puzzle, bridges)

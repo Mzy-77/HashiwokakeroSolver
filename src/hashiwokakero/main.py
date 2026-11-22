@@ -1,12 +1,12 @@
 from typing import Any
 
 from fastapi import FastAPI
-from Solver.puzzle import Puzzle , Bridge
-from Solver.algorithms import solve_backtracking, geneticSolver
+from hashiwokakero.Solver.puzzle import Puzzle , Bridge
+from hashiwokakero.Solver.algorithms import solve_backtracking, geneticSolver
 app = FastAPI(
-    title="Bridges Puzzle Solver",
-    description="An AI solver for Hashiwokakero puzzles.",
-    version="0.1.0",
+        title="Bridges Puzzle Solver",
+        description="An AI solver for Hashiwokakero puzzles.",
+        version="0.1.0",
 )
 
 
