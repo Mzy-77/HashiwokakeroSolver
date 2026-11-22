@@ -286,7 +286,7 @@ def memeticSolver(
                 best_genome = chromosome.copy
 
         ranked_population = sorted(
-            zip(current_population, scores)
+            zip(current_population, scores),
             key=lambda individual: individual[1]
         )
 
