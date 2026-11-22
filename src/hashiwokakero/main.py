@@ -1,6 +1,8 @@
+from typing import Any
+
 from fastapi import FastAPI
 from Solver.puzzle import Puzzle , Bridge
-from Solver.algorithms import solve_backtracking, geneticSolver, memeticSolver
+from Solver.algorithms import solve_backtracking, geneticSolver
 app = FastAPI(
     title="Bridges Puzzle Solver",
     description="An AI solver for Hashiwokakero puzzles.",
@@ -21,7 +23,7 @@ def health():
     return {"status": "healthy"}
 
 @app.post("/solve")
-def solve(request: dict):
+def solve(request: dict[str, Any]) -> list[Bridge] | dict[str, Any]:
     puzzle = Puzzle(rows=request["rows"], columns=request["cols"], islands=request["islands"])
     algorithm = request.get("algorithm")
     solution = None
@@ -31,7 +33,7 @@ def solve(request: dict):
         case "genetic":
             solution = geneticSolver(puzzle, request["bridges"])
         case "memetic":
-            solution = memeticSolver(puzzle, request["bridges"])
+            print("memetic")
         case _:
             return {"error": "Invalid algorithm specified."}
     if solution is None:

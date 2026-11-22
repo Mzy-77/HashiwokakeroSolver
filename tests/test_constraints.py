@@ -1,6 +1,6 @@
 import pytest 
-from Solver.puzzle import Puzzle, Bridge, Island
-from Solver.constraints import (
+from hashiwokakero.Solver.puzzle import Puzzle, Bridge, Island
+from hashiwokakero.Solver.constraints import (
     getBridgeCount,
     bridgeCountComplete,
     isBridgeCountsValid

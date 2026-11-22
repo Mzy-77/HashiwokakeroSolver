@@ -1,5 +1,5 @@
 
-from Solver.algorithms import (
+from hashiwokakero.Solver.algorithms import (
 
     selection,
     corssover,

@@ -1,6 +1,6 @@
-from Solver.puzzle import Puzzle, Island
-from Solver.algorithms import solve_backtracking
-from Solver.validator import is_complete_solution
+from hashiwokakero.Solver.puzzle import Puzzle, Island
+from hashiwokakero.Solver.algorithms import solve_backtracking
+from hashiwokakero.Solver.validator import is_complete_solution
 
 
 def test_solver_finds_solution():

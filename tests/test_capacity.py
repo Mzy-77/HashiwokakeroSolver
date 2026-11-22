@@ -1,5 +1,5 @@
-from Solver.capacity import hasRemainingCapacity
-from Solver.puzzle import Puzzle, Island, Bridge
+from hashiwokakero.Solver.capacity import hasRemainingCapacity
+from hashiwokakero.Solver.puzzle import Puzzle, Island, Bridge
 
 
 

@@ -1,4 +1,4 @@
-from Solver.puzzle import Puzzle , Bridge
+from hashiwokakero.Solver.puzzle import Puzzle , Bridge
 def isConnected(
         puzzle :Puzzle,
         bridges:list[Bridge]

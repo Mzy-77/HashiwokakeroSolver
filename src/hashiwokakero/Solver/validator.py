@@ -1,8 +1,8 @@
-from Solver.puzzle import Puzzle , Bridge
-from Solver.constraints import bridgeCountComplete , isBridgeCountsValid
+from hashiwokakero.Solver.puzzle import Puzzle , Bridge
+from hashiwokakero.Solver.constraints import bridgeCountComplete , isBridgeCountsValid
 
-from Solver.crossings import has_crossings
-from Solver.connectivity import isConnected
+from hashiwokakero.Solver.crossings import has_crossings
+from hashiwokakero.Solver.connectivity import isConnected
 
 def isValidState(
         puzzle: Puzzle,

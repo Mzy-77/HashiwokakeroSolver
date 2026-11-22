@@ -1,10 +1,10 @@
-from Solver.puzzle import Puzzle , Bridge
-from Solver.candidates import FindCandidates
-from Solver.validator import is_complete_solution
-from Solver.capacity import hasRemainingCapacity
-from Solver.connectivity import countComponents
-from Solver.constraints import getBridgeCount 
-from Solver.crossings import has_crossings
+from hashiwokakero.Solver.puzzle import Puzzle , Bridge
+from hashiwokakero.Solver.candidates import FindCandidates
+from hashiwokakero.Solver.validator import is_complete_solution
+from hashiwokakero.Solver.capacity import hasRemainingCapacity
+from hashiwokakero.Solver.connectivity import countComponents
+from hashiwokakero.Solver.constraints import getBridgeCount 
+from hashiwokakero.Solver.crossings import has_crossings
 import random
 
 
@@ -174,4 +174,3 @@ def geneticSolver(
         return asignBridges(best_genome, canadidates)
 
     return None
-

@@ -1,6 +1,6 @@
 from itertools import groupby
 
-from Solver.puzzle import Island 
+from hashiwokakero.Solver.puzzle import Island 
 
 def FindCandidates(islands: list[Island]) -> list[ tuple[ int,int ] ] :
     Candidates: set[tuple[int, int]] = set()

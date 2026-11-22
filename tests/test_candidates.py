@@ -1,5 +1,5 @@
-from Solver.puzzle import Island
-from Solver.candidates import FindCandidates
+from hashiwokakero.Solver.puzzle import Island
+from hashiwokakero.Solver.candidates import FindCandidates
 
 def test_horizontal_connection():
     islands = [

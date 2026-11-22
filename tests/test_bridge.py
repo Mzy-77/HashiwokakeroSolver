@@ -1,7 +1,7 @@
 
 import pytest
 
-from Solver.puzzle import Bridge
+from hashiwokakero.Solver.puzzle import Bridge
 
 
 def test_single_bridge():
