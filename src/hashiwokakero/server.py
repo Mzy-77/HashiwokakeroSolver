@@ -2,7 +2,7 @@ from typing import Any
 
 from fastapi import FastAPI
 from hashiwokakero.Solver.puzzle import Puzzle , Bridge
-from hashiwokakero.Solver.algorithms import solve_backtracking, geneticSolver
+from hashiwokakero.Solver.algorithms import solve_backtracking, geneticSolver, memeticSolver
 app = FastAPI(
         title="Bridges Puzzle Solver",
         description="An AI solver for Hashiwokakero puzzles.",
@@ -31,9 +31,9 @@ def solve(request: dict[str, Any]) -> list[Bridge] | dict[str, Any]:
         case "backtracking":
             solution = solve_backtracking(puzzle)
         case "genetic":
-            solution = geneticSolver(puzzle, request["bridges"])
+            solution = geneticSolver(puzzle,)
         case "memetic":
-            print("memetic")
+            solution = memeticSolver(puzzle)
         case _:
             return {"error": "Invalid algorithm specified."}
     if solution is None:
