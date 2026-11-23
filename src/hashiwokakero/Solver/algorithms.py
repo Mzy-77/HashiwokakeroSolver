@@ -268,7 +268,7 @@ def memeticSolver(
     best_genome = None
     best_score = float("inf")
     
-    for generation in range(max_generations):
+    for _ in range(max_generations):
         scores = [
             fitness(puzzle, asignBridges(chromosome, candidates))
             for chromosome in current_population
@@ -283,7 +283,7 @@ def memeticSolver(
 
             if score < best_score:
                 best_score = score
-                best_genome = chromosome.copy
+                best_genome = chromosome.copy()
 
         ranked_population = sorted(
             zip(current_population, scores),
