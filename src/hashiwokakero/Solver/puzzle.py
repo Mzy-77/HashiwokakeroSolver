@@ -1,11 +1,13 @@
 from dataclasses import dataclass
 
+
 @dataclass(frozen=True)
 class Island:
     id: int
     row: int
     column: int
     required: int
+
 
 @dataclass
 class Puzzle:
@@ -14,25 +16,32 @@ class Puzzle:
     islands: list[Island]
 
     def validate(self) -> None:
+        """Validate the grid dimensions and all island clues."""
+
         if self.rows <= 0 or self.columns <= 0:
             raise ValueError("Grid dimensions must be positive.")
 
         if not self.islands:
-            ValueError("Puzzle must contain islands.")
+            raise ValueError("Puzzle must contain islands.")
 
         ids: set[int] = set()
         positions: set[tuple[int, int]] = set()
 
-        for island in self.islands :
-            if island.id < 0 or island.id in ids :
-                raise ValueError("Island IDs must be unique and non-negative.")
+        for island in self.islands:
+            if island.id < 0 or island.id in ids:
+                raise ValueError(
+                    "Island IDs must be unique and non-negative."
+                )
 
             ids.add(island.id)
 
-            if not (0 <= island.row < self.rows):
+            if not 0 <= island.row < self.rows:
                 raise ValueError(f"Invalid row for island {island.id}.")
-            if not (0 <= island.column < self.columns):
-                raise ValueError(f"Invalid column for island {island.column}")
+
+            if not 0 <= island.column < self.columns:
+                raise ValueError(
+                    f"Invalid column for island {island.id}."
+                )
 
             position = (island.row, island.column)
             if position in positions:
@@ -41,7 +50,10 @@ class Puzzle:
             positions.add(position)
 
             if not 1 <= island.required <= 8:
-                raise ValueError("Island requirements must be between 1 and 8.")
+                raise ValueError(
+                    "Island requirements must be between 1 and 8."
+                )
+
 
 @dataclass(frozen=True)
 class Bridge:
@@ -50,14 +62,17 @@ class Bridge:
     count: int = 1
 
     def __post_init__(self):
+        if self.island_a < 0 or self.island_b < 0:
+            raise ValueError("Island IDs cannot be negative.")
+
         if self.island_a == self.island_b:
             raise ValueError("An island cannot connect to itself.")
+
+        if self.count not in (1, 2):
+            raise ValueError("Bridge count must be 1 or 2.")
 
         if self.island_a > self.island_b:
             first = self.island_b
             second = self.island_a
             object.__setattr__(self, "island_a", first)
             object.__setattr__(self, "island_b", second)
-
-        if self.count not in (1, 2):
-            raise ValueError("Bridge count must be 1 or 2.")
